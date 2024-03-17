@@ -1,0 +1,51 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Input Form</title>
+  </head>
+  <body>
+    <h1>API Input Form</h1>
+    <form id="apiForm">
+      <label for="dataArray">Enter data array (comma-separated):</label><br />
+      <input type="text" id="dataArray" name="dataArray" /><br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="responseContainer"></div>
+
+    <script>
+      document
+        .getElementById("apiForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const dataArray = document
+            .getElementById("dataArray")
+            .value.split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
+          const formData = { data: dataArray };
+
+          try {
+            const response = await fetch("http://localhost:3000/bfhl", {
+                
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            const responseData = await response.json();
+
+            // Display API response
+            document.getElementById("responseContainer").innerHTML =
+              JSON.stringify(responseData, null, 2);
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        });
+    </script>
+    <script src="index.js"></script>
+  </body>
+</html>
