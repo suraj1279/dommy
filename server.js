@@ -1,18 +1,19 @@
+// Server-side code (app.js)
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const path = require("path");
 const app = express();
 
 // Middleware to parse JSON data
 app.use(bodyParser.json());
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./index.html"));
 });
-// POST endpoint for /bfhl
+
 app.post("/bfhl", (req, res) => {
   try {
-    const { data } = req.body;
+    const data = req.body; // No need to destructure here
     console.log(data);
     // Validate input
     if (!Array.isArray(data)) {
@@ -32,12 +33,10 @@ app.post("/bfhl", (req, res) => {
         let c = parseInt(element);
         if (c % 2 == 0) {
           even_numbers.push(element);
-        }
-        else {
+        } else {
           odd_numbers.push(element);
         }
-      }
-       else if (typeof element === "string") {
+      } else if (typeof element === "string") {
         const uppercase = element.toUpperCase();
         alphabets.push(uppercase);
       }
@@ -61,6 +60,7 @@ app.post("/bfhl", (req, res) => {
 });
 
 // Start the server
-app.listen(3000, () => {
-  console.log("Server is running");
+const PORT = process.env.PORT || 3000; // Use process.env.PORT if available
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
